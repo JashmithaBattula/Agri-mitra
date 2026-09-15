@@ -101,8 +101,11 @@ pipeline {
             steps {
                 script {
                     echo "Checking Quality Gate status against SecureDeployHub policies..."
-                    // Here, a script would fetch the security policy from SecureDeployHub API
-                    // and fail the build if the thresholds are exceeded.
+                    // This calls the backend to evaluate vulnerabilities and creates an Audit Log!
+                    sh """
+                    curl -X POST "${SECUREDEPLOYHUB_API}/pipelines/runs/${PIPELINE_RUN_ID}/evaluate" \\
+                         -H "Content-Type: application/json"
+                    """
                 }
             }
         }
